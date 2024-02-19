@@ -2,12 +2,15 @@ package main
 
 import (
 	"context"
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
 	"github.com/stirk1337/awesomeProject/pkg/handler"
 	"github.com/stirk1337/awesomeProject/pkg/handler/service"
 	"github.com/stirk1337/awesomeProject/pkg/repository"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -32,10 +35,28 @@ func (s *Server) Shutdown(ctx context.Context) error {
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	if err := initConfig(); err != nil {
 		log.Fatalf("error initializing config: %v", err)
 	}
-	repos := repository.NewRepository()
+
+	db, err := repository.NewPostgresDB(repository.Config{
+		Host:     viper.GetString("db.host"),
+		Port:     viper.GetString("db.port"),
+		Username: viper.GetString("db.username"),
+		DBName:   viper.GetString("db.dbname"),
+		SSLMode:  viper.GetString("db.sslmode"),
+		Password: os.Getenv("DB_PASSWORD"),
+	})
+	if err != nil {
+		log.Fatalf("failed to initialize db: %s", err.Error())
+	}
+
+	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
