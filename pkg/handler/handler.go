@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/stirk1337/awesomeProject/pkg/handler/service"
+	"github.com/stirk1337/awesomeProject/pkg/service"
 )
 
 type Handler struct {
