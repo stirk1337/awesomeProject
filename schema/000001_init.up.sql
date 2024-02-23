@@ -17,7 +17,9 @@ CREATE TABLE users_lists
 (
     id serial primary key,
     user_id integer not null,
-    FOREIGN KEY (user_id) REFERENCES users ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users ON DELETE CASCADE,
+    list_id integer not null,
+    FOREIGN KEY (list_id) REFERENCES todo_lists ON DELETE CASCADE
 );
 
 CREATE TABLE todo_items

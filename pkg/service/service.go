@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/stirk1337/awesomeProject/pkg/repository"
 	"github.com/stirk1337/awesomeProject/pkg/service/auth"
+	"github.com/stirk1337/awesomeProject/pkg/todo"
 	"github.com/stirk1337/awesomeProject/pkg/user"
 )
 
@@ -13,6 +14,9 @@ type Authorization interface {
 }
 
 type TodoList interface {
+	Create(userId int, list todo.TodoList) (int, error)
+	GetAll(userId int) ([]todo.TodoList, error)
+	GetById(userId int, listId int) (todo.TodoList, error)
 }
 
 type TodoItem interface {
@@ -27,5 +31,5 @@ type Service struct {
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: auth.NewAuthService(repos.Authorization),
-	}
+		TodoList:      NewTodoListService(repos.TodoList)}
 }
