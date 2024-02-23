@@ -27,7 +27,7 @@ func (r *AuthPostgres) CreateUser(user user.User) (int, error) {
 
 func (r *AuthPostgres) GetUserHashByUsername(username string) (user.User, error) {
 	var usr user.User
-	query := fmt.Sprintf("SELECT password_hash FROM %s WHERE username = $1", usersTable)
+	query := fmt.Sprintf("SELECT id, password_hash FROM %s WHERE username = $1", usersTable)
 	err := r.db.Get(&usr, query, username)
 	return usr, err
 }
