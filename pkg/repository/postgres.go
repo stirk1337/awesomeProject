@@ -13,6 +13,10 @@ const (
 	listsItemsTable = "lists_items"
 )
 
+type Updater interface {
+	Updates() map[string]interface{}
+}
+
 type Config struct {
 	Host     string
 	Port     string
@@ -20,6 +24,10 @@ type Config struct {
 	Password string
 	DBName   string
 	SSLMode  string
+}
+
+func generateUpdateQuery(tableName string, condition string, updater Updater) string {
+	return ""
 }
 
 func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
